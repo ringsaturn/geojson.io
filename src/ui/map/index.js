@@ -1,9 +1,9 @@
-const mapboxgl = require('mapbox-gl');
+const maplibregl = require('maplibre-gl');
+const { Protocol } = require('pmtiles');
 
 require('qs-hash');
 const geojsonRewind = require('@mapbox/geojson-rewind');
-const MapboxDraw = require('@mapbox/mapbox-gl-draw').default;
-const MapboxGeocoder = require('@mapbox/mapbox-gl-geocoder');
+const MaplibreDraw = require('maplibre-gl-draw').default;
 
 const DrawLineString = require('../draw/linestring');
 const DrawRectangle = require('../draw/rectangle');
@@ -15,7 +15,6 @@ const { geojsonToLayer, bindPopup } = require('./util');
 const styles = require('./styles');
 const {
   DEFAULT_STYLE,
-  DEFAULT_PROJECTION,
   DEFAULT_DARK_FEATURE_COLOR,
   DEFAULT_LIGHT_FEATURE_COLOR,
   DEFAULT_SATELLITE_FEATURE_COLOR,
@@ -88,47 +87,46 @@ module.exports = function (context, readonly) {
   }
 
   function map() {
-    mapboxgl.accessToken =
-      'pk.eyJ1Ijoic3ZjLW9rdGEtbWFwYm94LXN0YWZmLWFjY2VzcyIsImEiOiJjbG5sMnExa3kxNTJtMmtsODJld24yNGJlIn0.RQ4CHchAYPJQZSiUJ0O3VQ';
+    // Register PMTiles protocol
+    const protocol = new Protocol();
+    maplibregl.addProtocol('pmtiles', protocol.tile);
 
-    mapboxgl.setRTLTextPlugin(
-      'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+    // Set RTL Text Plugin for MapLibre
+    maplibregl.setRTLTextPlugin(
+      'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
       null,
       true
     );
 
-    const projection = context.storage.get('projection') || DEFAULT_PROJECTION;
     const activeStyle = context.storage.get('style') || DEFAULT_STYLE;
 
     const foundStyle = styles.find((d) => d.title === activeStyle);
-    const { style, config } =
-      foundStyle || styles.find((d) => d.title === 'Standard');
+    const { style } = foundStyle || styles.find((d) => d.title === 'Light');
 
-    context.map = new mapboxgl.Map({
+    context.map = new maplibregl.Map({
       container: 'map',
       style,
-      ...(config ? { config } : {}),
       center: [20, 0],
       zoom: 2,
-      projection,
       hash: 'map'
     });
 
     if (writable) {
-      context.map.addControl(
-        new MapboxGeocoder({
-          accessToken: mapboxgl.accessToken,
-          mapboxgl,
-          marker: true
-        })
-      );
+      // Geocoder removed per user request
+      // context.map.addControl(
+      //   new MapboxGeocoder({
+      //     accessToken: MAPBOX_ACCESS_TOKEN,
+      //     mapboxgl: maplibregl,
+      //     marker: true
+      //   })
+      // );
 
-      context.Draw = new MapboxDraw({
+      context.Draw = new MaplibreDraw({
         displayControlsDefault: false,
         modes: {
-          ...MapboxDraw.modes,
+          ...MaplibreDraw.modes,
           simple_select: SimpleSelect,
-          direct_select: MapboxDraw.modes.direct_select,
+          direct_select: MaplibreDraw.modes.direct_select,
           draw_line_string: DrawLineString,
           draw_rectangle: DrawRectangle,
           draw_circle: DrawCircle
@@ -191,7 +189,7 @@ module.exports = function (context, readonly) {
         ]
       });
 
-      context.map.addControl(new mapboxgl.NavigationControl());
+      context.map.addControl(new maplibregl.NavigationControl());
 
       context.map.addControl(drawControl, 'top-right');
 
@@ -329,8 +327,7 @@ module.exports = function (context, readonly) {
           source: 'map-data',
           paint: {
             'fill-color': ['coalesce', ['get', 'fill'], color],
-            'fill-opacity': ['coalesce', ['get', 'fill-opacity'], 0.3],
-            'fill-emissive-strength': 1
+            'fill-opacity': ['coalesce', ['get', 'fill-opacity'], 0.3]
           },
           filter: ['==', ['geometry-type'], 'Polygon']
         });
@@ -342,8 +339,7 @@ module.exports = function (context, readonly) {
           paint: {
             'line-color': ['coalesce', ['get', 'stroke'], color],
             'line-width': ['coalesce', ['get', 'stroke-width'], 2],
-            'line-opacity': ['coalesce', ['get', 'stroke-opacity'], 1],
-            'line-emissive-strength': 1
+            'line-opacity': ['coalesce', ['get', 'stroke-opacity'], 1]
           },
           filter: ['==', ['geometry-type'], 'Polygon']
         });
@@ -355,8 +351,7 @@ module.exports = function (context, readonly) {
           paint: {
             'line-color': ['coalesce', ['get', 'stroke'], color],
             'line-width': ['coalesce', ['get', 'stroke-width'], 2],
-            'line-opacity': ['coalesce', ['get', 'stroke-opacity'], 1],
-            'line-emissive-strength': 1
+            'line-opacity': ['coalesce', ['get', 'stroke-opacity'], 1]
           },
           filter: ['==', ['geometry-type'], 'LineString']
         });

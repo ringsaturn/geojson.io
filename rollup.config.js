@@ -28,7 +28,10 @@ export default {
       'require.main === module': 'false', // jsonhint export quirk
       // Replace hardcoded dev path with production path in ui/map/clickable_marker.js
       '../dist/icons': production ? '/icons' : '../dist/icons',
-      delimiters: ['', ''] 
+      // Replace environment variables
+      'process.env.VITE_PROTOMAPS_API_KEY': JSON.stringify(process.env.VITE_PROTOMAPS_API_KEY || 'c7f327a1deae97a6'),
+      delimiters: ['', ''],
+      preventAssignment: true
     }),
 
     resolve({

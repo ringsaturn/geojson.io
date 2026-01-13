@@ -1,4 +1,4 @@
-const mapboxgl = require('mapbox-gl');
+const maplibregl = require('maplibre-gl');
 const escape = require('escape-html');
 const length = require('@turf/length').default;
 const area = require('@turf/area').default;
@@ -451,7 +451,7 @@ function bindPopup(e, context, writable) {
     right: [-25, -20]
   };
 
-  new mapboxgl.Popup({
+  new maplibregl.Popup({
     closeButton: false,
     maxWidth: '251px',
     offset: popupOffsets,

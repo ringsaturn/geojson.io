@@ -1,9 +1,9 @@
-// custom mapbopx-gl-draw mode that extends draw_line_string
+// custom maplibre-gl-draw mode that extends draw_line_string
 // shows a center point, radius line, and circle polygon while drawing
 // forces draw.create on creation of second vertex
 const circle = require('@turf/circle').default;
 const length = require('@turf/length').default;
-const MapboxDraw = require('@mapbox/mapbox-gl-draw').default;
+const MaplibreDraw = require('maplibre-gl-draw').default;
 
 const { getDisplayMeasurements } = require('./util.js');
 
@@ -15,7 +15,7 @@ function circleFromTwoVertexLineString(geojson) {
 }
 
 const CircleMode = {
-  ...MapboxDraw.modes.draw_line_string,
+  ...MaplibreDraw.modes.draw_line_string,
 
   clickAnywhere: function (state, e) {
     // this ends the drawing after the user creates a second point, triggering this.onStop

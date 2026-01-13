@@ -15,9 +15,9 @@ require('../node_modules/@fortawesome/fontawesome-free/css/solid.min.css');
 // tailwind css
 require('../dist/css/tailwind_dist.css');
 
-// mapboxgl, mapboxgl-draw, mapbox-gl-geocoder css
-require('../node_modules/mapbox-gl/dist/mapbox-gl.css');
-require('../node_modules/@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css');
+// maplibre-gl, maplibre-gl-draw, mapbox-gl-geocoder css
+require('../node_modules/maplibre-gl/dist/maplibre-gl.css');
+require('../node_modules/maplibre-gl-draw/dist/mapbox-gl-draw.css');
 require('../node_modules/@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css');
 
 // import css
@@ -26,18 +26,15 @@ require('./css/marker.css');
 require('./css/theme.css');
 require('./css/site.css');
 
-const Sentry = require('@sentry/browser');
-const { BrowserTracing } = require('@sentry/tracing');
-
 window.mbxMetadata = {
   content_type: 'developer-tool'
 };
 
-// eslint-disable-next-line no-undef
-initializeMapboxAnalytics({
-  segmentWriteKeyStaging: 'fl0c8p240n',
-  marketoMunchkin: false
-});
+// // eslint-disable-next-line no-undef
+// initializeMapboxAnalytics({
+//   segmentWriteKeyStaging: 'fl0c8p240n',
+//   marketoMunchkin: false
+// });
 
 const ui = require('./ui'),
   map = require('./ui/map'),
@@ -72,10 +69,3 @@ function geojsonIO() {
   context.user = user(context);
   return context;
 }
-
-Sentry.init({
-  dsn: 'https://c2d096c944dd4150ab7e44b0881b4a46@o5937.ingest.sentry.io/11480',
-  release: 'geojson.io@latest',
-  integrations: [new BrowserTracing()],
-  tracesSampleRate: 0.1
-});

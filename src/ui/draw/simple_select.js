@@ -1,7 +1,7 @@
-const MapboxDraw = require('@mapbox/mapbox-gl-draw').default;
+const MaplibreDraw = require('maplibre-gl-draw').default;
 
 const SimpleSelect = {
-  ...MapboxDraw.modes.simple_select,
+  ...MaplibreDraw.modes.simple_select,
   onDrag: function (state, e) {
     const selectedFeatures = this.getSelected();
     const soloPointSelected =

@@ -1,48 +1,45 @@
+// Protomaps API Key - configure via environment variable
+const PROTOMAPS_API_KEY =
+  (typeof process !== 'undefined' &&
+    process.env &&
+    process.env.VITE_PROTOMAPS_API_KEY) ||
+  'c7f327a1deae97a6';
+
 module.exports = [
   {
-    title: 'Standard',
-    style: 'mapbox://styles/mapbox/standard'
+    title: 'Light',
+    style: `https://api.protomaps.com/styles/v5/light/en.json?key=${PROTOMAPS_API_KEY}`
   },
   {
-    title: 'Standard Satellite',
-    style: 'mapbox://styles/mapbox/standard-satellite'
+    title: 'Dark',
+    style: `https://api.protomaps.com/styles/v5/dark/en.json?key=${PROTOMAPS_API_KEY}`
   },
   {
-    title: 'Standard Light',
-    style: 'mapbox://styles/mapbox/standard',
-    config: {
-      basemap: {
-        theme: 'monochrome'
-      }
-    }
+    title: 'Grayscale',
+    style: `https://api.protomaps.com/styles/v5/grayscale/en.json?key=${PROTOMAPS_API_KEY}`
   },
   {
-    title: 'Standard Dark',
-    style: 'mapbox://styles/mapbox/standard',
-    config: {
-      basemap: {
-        theme: 'monochrome',
-        lightPreset: 'night'
-      }
-    }
+    title: 'White',
+    style: `https://api.protomaps.com/styles/v5/white/en.json?key=${PROTOMAPS_API_KEY}`
   },
   {
-    title: 'Outdoors',
-    style: 'mapbox://styles/mapbox/outdoors-v12'
+    title: 'Black',
+    style: `https://api.protomaps.com/styles/v5/black/en.json?key=${PROTOMAPS_API_KEY}`
   },
   {
     title: 'OSM',
     style: {
       name: 'osm',
       version: 8,
-      glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
+      glyphs:
+        'https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf',
       sources: {
         'osm-raster-tiles': {
           type: 'raster',
           tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
           tileSize: 256,
           attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }
       },
       layers: [

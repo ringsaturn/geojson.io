@@ -1,11 +1,11 @@
 // this mode extends the build-in linestring tool, displaying the current length
 // of the line as the user draws using a point feature and a symbol layer
-const MapboxDraw = require('@mapbox/mapbox-gl-draw').default;
+const MaplibreDraw = require('maplibre-gl-draw').default;
 
 const { getDisplayMeasurements } = require('./util.js');
 
 const ExtendedLineStringMode = {
-  ...MapboxDraw.modes.draw_line_string,
+  ...MaplibreDraw.modes.draw_line_string,
 
   toDisplayFeatures: function (state, geojson, display) {
     const isActiveLine = geojson.properties.id === state.line.id;
